@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app/source # Solo monta el código fuente
+    environment:
+      - ENV=debug
+      - PORT=8080
+      - GIN_MODE=debug #debug, release, test
+    command: ["/app/main"]
+
+  # Redis - Servicio para caching o mensajería
+  # redis:
+  #   image: redis:alpine
+  #   container_name: redis_service
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data # Volumen para persistir datos en Redis
+  #   command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+
+  # LocalStack - Servicio para simular AWS localmente
+  # localstack:
+  #   image: localstack/localstack
+  #   container_name: localstack_service
+  #   ports:
+  #     - "4566:4566"  # Puerto para servicios principales
+  #     - "4571:4571"  # Puerto para el servicio Lambda
+  #   environment:
+  #     - SERVICES=s3,sqs,sns,dynamodb # Configura los servicios de AWS que quieres simular
+  #     - DEFAULT_REGION=us-east-1     # Región predeterminada para LocalStack
+  #     - DATA_DIR=/tmp/localstack/data
+  #   volumes:
+  #     - localstack_data:/tmp/localstack # Volumen para almacenar datos de LocalStack
+
+  # MySQL - Base de datos relacional
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql_service
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword    # Contraseña para el usuario root
+  #     MYSQL_DATABASE: app_db               # Nombre de la base de datos inicial
+  #     MYSQL_USER: app_user                 # Usuario de la aplicación
+  #     MYSQL_PASSWORD: app_password         # Contraseña del usuario de la aplicación
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql # Volumen para persistir datos de MySQL
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootpassword"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+
+# Volúmenes para servicios adicionales (Descomentar cuando sea necesario)
+# volumes:
+#   redis_data: # Volumen persistente para Redis
+#     # Uso futuro: Guardará datos en memoria de Redis
+#     # Descomenta y configura en "redis" cuando lo necesites
+#   localstack_data: # Volumen para los datos de LocalStack
+#     # Uso futuro: Almacena datos de los servicios simulados (S3, DynamoDB, etc.)
+#     # Descomenta y configura en "localstack" cuando lo necesites
+#   mysql_data: # Volumen persistente para MySQL
+#     # Uso futuro: Guardará los datos de la base de datos
+#     # Descomenta y configura en "mysql" cuando lo necesites

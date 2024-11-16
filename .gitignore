@@ -1,0 +1,32 @@
+# Dependencias descargadas por Go (no incluir binarios ni dependencias locales)
+vendor/
+
+# Binarios compilados
+*.exe
+*.dll
+*.so
+*.dylib
+main
+
+# Archivos y directorios generados por herramientas de desarrollo
+*.log
+*.tmp
+*.out
+
+# Archivos de configuración locales y secretos (personaliza según sea necesario)
+.env
+.env.*
+
+# Archivos de editor/IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Archivos y directorios generados por Docker
+.dockerignore
+docker-compose.override.yml
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
